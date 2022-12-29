@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  background-color: rgb(210, 210, 210);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#main_container {
+  width: 70%;
+  margin-inline: auto;
+  margin-top: 5%;
+  border: solid 1px black;
+  padding: 3% 5%;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+#input_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
