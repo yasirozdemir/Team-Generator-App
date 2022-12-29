@@ -39,6 +39,7 @@ addParticipantButton.addEventListener("click", () => {
 });
 
 var numberInput = document.getElementById("number_input");
+var generateButton = document.getElementById("generate_button");
 
 var listContainer = document.getElementById("list_container");
 
@@ -54,9 +55,12 @@ const generateTeams = function () {
     <hr>`;
     listContainer.appendChild(newTeamList);
   }
+
+  // to prevent the function break remove event listener from the button
+  generateButton.removeEventListener("click", generateTeams);
+  generateButton.style.display = "none";
 };
 
-var generateButton = document.getElementById("generate_button");
 generateButton.addEventListener("click", generateTeams);
 
 window.onload = () => {
