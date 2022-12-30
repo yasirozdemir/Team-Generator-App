@@ -31,6 +31,12 @@ body {
   column-gap: 1rem;
 }
 
+#name_input::placeholder,
+#number_input::placeholder {
+  color: red;
+  font-weight: 700;
+}
+
 #list_container {
   display: flex;
   justify-content: center;

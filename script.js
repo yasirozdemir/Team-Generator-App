@@ -43,22 +43,63 @@ var generateButton = document.getElementById("generate_button");
 
 var listContainer = document.getElementById("list_container");
 
-const generateTeams = function () {
-  // TODO randomize all unassigned names and assign them to new teams
-  let unassignedParticipantsNode = document.querySelectorAll(
+const shuffleUnassignedParticipants = function () {
+  const unassignedParticipantsArray = document.querySelectorAll(
     "#unassigned-participants_list li"
   );
+
+  let shuffledArray = [];
+  let usedIndexes = [];
+
+  let i = 0;
+  while (i < unassignedParticipantsArray.length) {
+    let randomIndex = Math.floor(
+      Math.random() * unassignedParticipantsArray.length
+    );
+    if (!usedIndexes.includes(randomIndex)) {
+      shuffledArray.push(unassignedParticipantsArray[randomIndex]);
+      usedIndexes.push(randomIndex);
+      i++;
+    }
+  }
+  return shuffledArray;
+};
+
+const generateTeams = function () {
+  let memberPerTeam =
+    shuffleUnassignedParticipants().length / numberInput.value;
+
   for (let i = 1; i <= numberInput.value; i++) {
     let newTeamList = document.createElement("div");
     newTeamList.className = "lists";
+    newTeamList.setAttribute("id", `team-${i}`);
     newTeamList.innerHTML = `<h3>Team ${i}</h3>
     <hr>`;
     listContainer.appendChild(newTeamList);
+
+    for (let k = 1; k <= memberPerTeam; k++) {
+      newTeamList.appendChild(
+        shuffleUnassignedParticipants()[
+          shuffleUnassignedParticipants().length - 1
+        ]
+      );
+      shuffleUnassignedParticipants().pop;
+    }
+    let lastTeam = document.getElementById(`team-${numberInput.value}`);
+  }
+
+  if (shuffleUnassignedParticipants().length > 0) {
+    console.log(shuffleUnassignedParticipants());
   }
 
   // to prevent the function break remove event listener from the button
-  generateButton.removeEventListener("click", generateTeams);
-  generateButton.style.display = "none";
+  if (numberInput.value >= 1) {
+    generateButton.removeEventListener("click", generateTeams);
+    numberInput.value = "";
+    generateButton.disabled = true;
+    numberInput.disabled = true;
+    numberInput.setAttribute("placeholder", "TEAMS CREATED");
+  }
 };
 
 generateButton.addEventListener("click", generateTeams);
