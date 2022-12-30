@@ -43,7 +43,7 @@ var generateButton = document.getElementById("generate_button");
 
 var listContainer = document.getElementById("list_container");
 
-const shuffleUnassignedParticipants = function () {
+function shuffleUnassignedParticipants() {
   const unassignedParticipantsArray = document.querySelectorAll(
     "#unassigned-participants_list li"
   );
@@ -63,7 +63,7 @@ const shuffleUnassignedParticipants = function () {
     }
   }
   return shuffledArray;
-};
+}
 
 const generateTeams = function () {
   let memberPerTeam =
@@ -97,8 +97,8 @@ const generateTeams = function () {
 
   let listsArray = document.getElementsByClassName("lists");
   if (stillHaveUnassigned) {
-    console.log(shuffleUnassignedParticipants());
     for (let i = 0; i < shuffleUnassignedParticipants().length; i++) {
+      listsArray[i + 1].appendChild(shuffleUnassignedParticipants()[i]);
       console.log(shuffleUnassignedParticipants()[i]);
     }
   }
