@@ -26,7 +26,7 @@ var addParticipantButton = document.getElementById("add-participant_button");
 addParticipantButton.addEventListener("click", () => {
   let newParticipantName = nameInput.value;
   if (newParticipantName != "") {
-    let newParticipant = document.createElement("li");
+    let newParticipant = document.createElement("div");
     newParticipant.innerText = newParticipantName;
     newParticipant.className = "list-item";
     unassignedParticipantsList.appendChild(newParticipant);
@@ -44,9 +44,10 @@ var generateButton = document.getElementById("generate_button");
 var listContainer = document.getElementById("list_container");
 
 function shuffleUnassignedParticipants() {
-  const unassignedParticipantsArray = document.querySelectorAll(
-    "#unassigned-participants_list li"
+  let unassignedParticipantsNode = document.querySelectorAll(
+    "#unassigned-participants_list div"
   );
+  let unassignedParticipantsArray = Array.from(unassignedParticipantsNode);
 
   let shuffledArray = [];
   let usedIndexes = [];
@@ -65,9 +66,10 @@ function shuffleUnassignedParticipants() {
   return shuffledArray;
 }
 
-const generateTeams = function () {
-  let memberPerTeam =
-    shuffleUnassignedParticipants().length / numberInput.value;
+function generateTeams() {
+  let shuffledArray = shuffleUnassignedParticipants();
+
+  let memberPerTeam = shuffledArray.length / numberInput.value;
 
   if (memberPerTeam < 1) {
     numberInput.value = "1";
@@ -79,39 +81,29 @@ const generateTeams = function () {
     let newTeamList = document.createElement("div");
     newTeamList.className = "lists";
     newTeamList.innerHTML = `<h3>Team ${i}</h3>
-     <hr>`;
+          <hr>`;
+    // TODO add a container div (flex-box)
     listContainer.appendChild(newTeamList);
 
-    for (let k = 1; k <= memberPerTeam; k++) {
-      newTeamList.appendChild(
-        shuffleUnassignedParticipants()[
-          shuffleUnassignedParticipants().length - 1
-        ]
-      );
-      shuffleUnassignedParticipants().pop;
-    }
-  }
-
-  let stillHaveUnassigned =
-    shuffleUnassignedParticipants().length > 0 ? true : false;
-
-  let listsArray = document.getElementsByClassName("lists");
-  if (stillHaveUnassigned) {
-    for (let i = 0; i < shuffleUnassignedParticipants().length; i++) {
-      listsArray[i + 1].appendChild(shuffleUnassignedParticipants()[i]);
-      console.log(shuffleUnassignedParticipants()[i]);
+    if (shuffledArray.length > 0) {
+      let newTeamMembers = [];
+      for (let k = 0; k < memberPerTeam; k++) {
+        newTeamMembers.push(shuffledArray[shuffledArray.length - 1]);
+        shuffledArray.pop();
+      }
+      for (member of newTeamMembers) {
+        newTeamList.appendChild(member);
+      }
     }
   }
 
   // to prevent the function break remove event listener from the button
-  if (numberInput.value >= 1) {
-    generateButton.removeEventListener("click", generateTeams);
-    numberInput.value = "";
-    generateButton.disabled = true;
-    numberInput.disabled = true;
-    numberInput.setAttribute("placeholder", "TEAMS CREATED");
-  }
-};
+  generateButton.removeEventListener("click", generateTeams);
+  numberInput.value = "";
+  generateButton.disabled = true;
+  numberInput.disabled = true;
+  numberInput.setAttribute("placeholder", "TEAMS CREATED");
+}
 
 generateButton.addEventListener("click", generateTeams);
 
