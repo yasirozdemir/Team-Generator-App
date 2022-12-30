@@ -69,12 +69,17 @@ const generateTeams = function () {
   let memberPerTeam =
     shuffleUnassignedParticipants().length / numberInput.value;
 
+  if (memberPerTeam < 1) {
+    numberInput.value = "1";
+    alert("Number of members per team must be at least 1");
+    return;
+  }
+
   for (let i = 1; i <= numberInput.value; i++) {
     let newTeamList = document.createElement("div");
     newTeamList.className = "lists";
-    newTeamList.setAttribute("id", `team-${i}`);
     newTeamList.innerHTML = `<h3>Team ${i}</h3>
-    <hr>`;
+     <hr>`;
     listContainer.appendChild(newTeamList);
 
     for (let k = 1; k <= memberPerTeam; k++) {
@@ -85,11 +90,17 @@ const generateTeams = function () {
       );
       shuffleUnassignedParticipants().pop;
     }
-    let lastTeam = document.getElementById(`team-${numberInput.value}`);
   }
 
-  if (shuffleUnassignedParticipants().length > 0) {
+  let stillHaveUnassigned =
+    shuffleUnassignedParticipants().length > 0 ? true : false;
+
+  let listsArray = document.getElementsByClassName("lists");
+  if (stillHaveUnassigned) {
     console.log(shuffleUnassignedParticipants());
+    for (let i = 0; i < shuffleUnassignedParticipants().length; i++) {
+      console.log(shuffleUnassignedParticipants()[i]);
+    }
   }
 
   // to prevent the function break remove event listener from the button
