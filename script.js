@@ -103,14 +103,18 @@ function generateTeams() {
     }
   }
 
-  let numberOfTeams = listContainer.childElementCount;
-  // deleting the teams that don't have at least 1 children element
-  for (let j = 1; j < numberOfTeams; j++) {
-    let newTeamList = document.getElementById(`team-${j}`);
-    let haveChildrenElement = newTeamList.childElementCount > 0 ? true : false;
-    if (!haveChildrenElement) {
-      listContainer.removeChild(newTeamList.parentNode);
-      newTeamList.innerHTML = "";
+  let unassignedParticipantsNode = document.querySelectorAll(
+    "#unassigned-participants_list div"
+  );
+  let unassignedParticipantsArray = Array.from(unassignedParticipantsNode);
+
+  let stillHaveUnassigned =
+    unassignedParticipantsArray.length > 0 ? true : false;
+
+  if (stillHaveUnassigned) {
+    for (let i = 0; i < unassignedParticipantsArray.length; i++) {
+      let newTeamList = document.getElementById(`team-${i + 1}`); // added 1 because i is starting from 0
+      newTeamList.appendChild(unassignedParticipantsArray[i]);
     }
   }
 
