@@ -122,6 +122,15 @@ function generateTeams() {
   for (member of assignedMembers) {
     member.addEventListener("click", (eventData) => {
       let memberToMakeUnassigned = eventData.target;
+      // console.log(typeof memberToMakeUnassigned.parentNode.parentNode);
+      if (memberToMakeUnassigned.parentNode.childElementCount === 1) {
+        // if (memberToMakeUnassigned.parentNode.parentNode != null) {
+        //   memberToMakeUnassigned.parentNode.parentNode.nextElementSibling.firstChild.innerHTML =
+        //     memberToMakeUnassigned.parentNode.parentNode.firstChild.innerHTML;
+        // }
+        listContainer.removeChild(memberToMakeUnassigned.parentNode.parentNode);
+        memberToMakeUnassigned.parentNode.parentNode.innerHTML = "";
+      }
       unassignedParticipantsList.appendChild(memberToMakeUnassigned);
     });
   }
