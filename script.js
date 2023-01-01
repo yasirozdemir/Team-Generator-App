@@ -78,22 +78,39 @@ function generateTeams() {
   }
 
   for (let i = 1; i <= numberInput.value; i++) {
-    let newTeamList = document.createElement("div");
-    newTeamList.className = "lists";
-    newTeamList.innerHTML = `<h3>Team ${i}</h3>
-          <hr>`;
-    // TODO add a container div (flex-box)
-    listContainer.appendChild(newTeamList);
+    let newTeamListContainer = document.createElement("div");
+    newTeamListContainer.className = "lists";
+    newTeamListContainer.innerHTML = `<h3>Team ${i}</h3>
+          <hr>
+          <div id='team-${i}' class ='teams'></div>`;
+
+    listContainer.appendChild(newTeamListContainer);
+    let newTeamList = document.getElementById(`team-${i}`);
 
     if (shuffledArray.length > 0) {
       let newTeamMembers = [];
-      for (let k = 0; k < memberPerTeam; k++) {
+      for (let temp = 1; temp <= memberPerTeam; temp++) {
         newTeamMembers.push(shuffledArray[shuffledArray.length - 1]);
         shuffledArray.pop();
       }
+
       for (member of newTeamMembers) {
-        newTeamList.appendChild(member);
+        if (typeof member != "undefined") {
+          newTeamList.appendChild(member);
+          // newTeamList.innerHTML += `<div>${member.innerText}</div>`;
+        }
       }
+    }
+  }
+
+  let numberOfTeams = listContainer.childElementCount;
+  // deleting the teams that don't have at least 1 children element
+  for (let j = 1; j < numberOfTeams; j++) {
+    let newTeamList = document.getElementById(`team-${j}`);
+    let haveChildrenElement = newTeamList.childElementCount > 0 ? true : false;
+    if (!haveChildrenElement) {
+      listContainer.removeChild(newTeamList.parentNode);
+      newTeamList.innerHTML = "";
     }
   }
 
@@ -103,6 +120,8 @@ function generateTeams() {
   generateButton.disabled = true;
   numberInput.disabled = true;
   numberInput.setAttribute("placeholder", "TEAMS CREATED");
+
+  // unassignedParticipantsList.innerHTML = ``;
 }
 
 generateButton.addEventListener("click", generateTeams);
