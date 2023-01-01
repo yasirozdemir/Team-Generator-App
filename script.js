@@ -8,7 +8,7 @@ const addNewParticipant = function () {
     if (eventData.key === "Enter") {
       let newParticipantName = nameInput.value;
       if (newParticipantName != "") {
-        let newParticipant = document.createElement("li");
+        let newParticipant = document.createElement("div");
         newParticipant.innerText = newParticipantName;
         newParticipant.className = "list-item";
         unassignedParticipantsList.appendChild(newParticipant);
@@ -118,14 +118,20 @@ function generateTeams() {
     }
   }
 
+  var assignedMembers = document.querySelectorAll(".teams > div");
+  for (member of assignedMembers) {
+    member.addEventListener("click", (eventData) => {
+      let memberToMakeUnassigned = eventData.target;
+      unassignedParticipantsList.appendChild(memberToMakeUnassigned);
+    });
+  }
+
   // to prevent the function break remove event listener from the button
   generateButton.removeEventListener("click", generateTeams);
   numberInput.value = "";
   generateButton.disabled = true;
   numberInput.disabled = true;
   numberInput.setAttribute("placeholder", "TEAMS CREATED");
-
-  // unassignedParticipantsList.innerHTML = ``;
 }
 
 generateButton.addEventListener("click", generateTeams);

@@ -77,28 +77,15 @@ body {
   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
 }
 
-#unassigned-participants_list > div::after,
-.teams > div::after {
-  content: "";
-  position: absolute;
-  background-image: url(./assets/x-square.svg);
-  background-position: center center;
-  background-repeat: no-repeat;
-  height: 100%;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 85%;
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility 0s, opacity 350ms linear;
-  cursor: pointer;
+.teams > div {
+  transition: background-color, box-shadow 500ms;
 }
 
-#unassigned-participants_list > div:hover::after,
-.teams > div:hover::after {
-  opacity: 100%;
-  visibility: visible;
+.teams > div:hover {
+  background-color: rgba(221, 221, 221, 0.589);
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+  text-decoration: line-through;
 }
 
 #main_container > hr,
