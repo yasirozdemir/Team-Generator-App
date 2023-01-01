@@ -59,6 +59,48 @@ body {
   text-align: center;
 }
 
+#unassigned-participants_list,
+.teams {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  row-gap: 0.75vh;
+  align-items: center;
+}
+
+#unassigned-participants_list > div,
+.teams > div {
+  position: relative;
+  width: 75%;
+  border-radius: 10px;
+  padding: 2% 0;
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+#unassigned-participants_list > div::after,
+.teams > div::after {
+  content: "";
+  position: absolute;
+  background-image: url(./assets/x-square.svg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 85%;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 350ms linear;
+  cursor: pointer;
+}
+
+#unassigned-participants_list > div:hover::after,
+.teams > div:hover::after {
+  opacity: 100%;
+  visibility: visible;
+}
+
 #main_container > hr,
 .lists > hr {
   border: 0;
