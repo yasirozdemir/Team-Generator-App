@@ -6,30 +6,22 @@ var unassignedParticipantsList = document.getElementById(
 var nameInput = document.getElementById("name_input");
 var addParticipantButton = document.getElementById("add-participant_button");
 
-var numberInput = document.getElementById("number_input");
 var generateButton = document.getElementById("generate_button");
 
 var listContainer = document.getElementById("list_container");
 
-// function makeUnassignedParticipantsRemovable() {
-//   let unassignedParticipantsNode = document.querySelectorAll(
-//     "#unassigned-participants_list div"
-//   );
+function makeUnassignedParticipantsRemovable() {
+  let unassignedParticipantsNode =
+    document.getElementsByClassName("unassigned");
 
-//   let unassignedParticipantsArray = Array.from(unassignedParticipantsNode);
-
-//   for (unassigned of unassignedParticipantsArray) {
-//     unassigned.addEventListener("click", (eventData) => {
-//       // eventData.target.outerHTML = "";
-//       let indexToRemove = unassignedParticipantsArray.indexOf(eventData.target);
-//       unassignedParticipantsArray.splice(indexToRemove, 1);
-//       unassignedParticipantsList.innerHTML = "";
-//       for (item of unassignedParticipantsArray) {
-//         unassignedParticipantsList.appendChild(item);
-//       }
-//     });
-//   }
-// }
+  for (unassigned of unassignedParticipantsNode) {
+    unassigned.addEventListener("click", (eventData) => {
+      // let memberToMakeUnassigned = eventData.target;
+      unassignedParticipantsList.removeChild(eventData.target);
+      console.log(eventData);
+    });
+  }
+}
 
 function addNewParticipant(eventData) {
   if (
@@ -40,10 +32,10 @@ function addNewParticipant(eventData) {
     if (newParticipantName != "") {
       let newParticipant = document.createElement("div");
       newParticipant.innerText = newParticipantName;
-      newParticipant.className = "list-item";
+      newParticipant.classList.add("list-item", "unassigned");
       unassignedParticipantsList.appendChild(newParticipant);
       nameInput.value = "";
-      // makeUnassignedParticipantsRemovable();
+      makeUnassignedParticipantsRemovable();
       return;
     } else {
       nameInput.setAttribute("placeholder", "Please insert a name!");
@@ -56,6 +48,9 @@ function shuffleUnassignedParticipants() {
   let unassignedParticipantsNode = document.querySelectorAll(
     "#unassigned-participants_list div"
   );
+  for (item of unassignedParticipantsNode) {
+    item.classList.remove("unassigned");
+  }
   let unassignedParticipantsArray = Array.from(unassignedParticipantsNode);
 
   let shuffledArray = [];
@@ -76,6 +71,8 @@ function shuffleUnassignedParticipants() {
 }
 
 function generateTeams() {
+  var numberInput = document.getElementById("number_input");
+
   let shuffledArray = shuffleUnassignedParticipants();
 
   let memberPerTeam = shuffledArray.length / numberInput.value;
@@ -107,7 +104,6 @@ function generateTeams() {
         for (member of newTeamMembers) {
           if (typeof member != "undefined") {
             newTeamList.appendChild(member);
-            // newTeamList.innerHTML += `<div>${member.innerText}</div>`;
           }
         }
       }
@@ -128,10 +124,11 @@ function generateTeams() {
       }
     }
 
-    var assignedMembers = document.querySelectorAll(".teams > div");
+    var assignedMembers = document.querySelectorAll(".teams .list-item");
     for (member of assignedMembers) {
       member.addEventListener("click", (eventData) => {
         let memberToMakeUnassigned = eventData.target;
+        memberToMakeUnassigned.classList.add("unassigned");
         if (memberToMakeUnassigned.parentNode.childElementCount === 1) {
           listContainer.removeChild(
             memberToMakeUnassigned.parentNode.parentNode
@@ -139,8 +136,19 @@ function generateTeams() {
           memberToMakeUnassigned.parentNode.parentNode.innerHTML = "";
         }
         unassignedParticipantsList.appendChild(memberToMakeUnassigned);
+        makeUnassignedParticipantsRemovable();
       });
     }
+
+    // TODO delete empty teams
+    // let newTeams = document.getElementsByClassName("teams");
+    // for (let i = 0; i < newTeams.length; i++) {
+    //   if (newTeams[i].childElementCount === 0) {
+    //     console.log(newTeams[i].parentNode.outerHTML);
+    //     // newTeams[i].parentNode.outerHTML = "";
+    //     listContainer.removeChild(newTeams[i].parentNode);
+    //   }
+    // }
 
     // to prevent the function break remove event listener from the button
     generateButton.removeEventListener("click", generateTeams);
@@ -163,5 +171,5 @@ function addingEventListeners() {
 
 window.onload = () => {
   addingEventListeners();
-  // makeUnassignedParticipantsRemovable();
+  makeUnassignedParticipantsRemovable();
 };
