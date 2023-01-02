@@ -10,15 +10,16 @@ var generateButton = document.getElementById("generate_button");
 
 var listContainer = document.getElementById("list_container");
 
+let questionMark = document.querySelector("#input_container > div > svg");
+let infoAboutPage = document.getElementById("info-about-page");
+
 function makeUnassignedParticipantsRemovable() {
   let unassignedParticipantsNode =
     document.getElementsByClassName("unassigned");
 
   for (unassigned of unassignedParticipantsNode) {
     unassigned.addEventListener("click", (eventData) => {
-      // let memberToMakeUnassigned = eventData.target;
       unassignedParticipantsList.removeChild(eventData.target);
-      console.log(eventData);
     });
   }
 }
@@ -130,25 +131,30 @@ function generateTeams() {
         let memberToMakeUnassigned = eventData.target;
         memberToMakeUnassigned.classList.add("unassigned");
         if (memberToMakeUnassigned.parentNode.childElementCount === 1) {
+          // memberToMakeUnassigned.parentNode.parentNode.nextSibling.firstChild.innerHTML =
+          //   memberToMakeUnassigned.parentNode.parentNode.firstChild.innerHTML;
           listContainer.removeChild(
             memberToMakeUnassigned.parentNode.parentNode
           );
-          memberToMakeUnassigned.parentNode.parentNode.innerHTML = "";
         }
         unassignedParticipantsList.appendChild(memberToMakeUnassigned);
-        makeUnassignedParticipantsRemovable();
       });
+      makeUnassignedParticipantsRemovable();
     }
 
-    // TODO delete empty teams
-    // let newTeams = document.getElementsByClassName("teams");
-    // for (let i = 0; i < newTeams.length; i++) {
-    //   if (newTeams[i].childElementCount === 0) {
-    //     console.log(newTeams[i].parentNode.outerHTML);
-    //     // newTeams[i].parentNode.outerHTML = "";
-    //     listContainer.removeChild(newTeams[i].parentNode);
-    //   }
-    // }
+    // deleting empty arrays
+    let newTeams = document.getElementsByClassName("teams");
+    let emptyTeamsArray = [];
+    for (let i = 0; i < newTeams.length; i++) {
+      if (newTeams[i].childElementCount === 0) {
+        emptyTeamsArray.push(newTeams[i].parentNode);
+        //newTeams[i].parentNode.outerHTML = "";
+        // newTeams[i].parentNode.remove();
+      }
+    }
+    for (team of emptyTeamsArray) {
+      team.remove();
+    }
 
     // to prevent the function break remove event listener from the button
     generateButton.removeEventListener("click", generateTeams);
@@ -167,9 +173,13 @@ function addingEventListeners() {
   addParticipantButton.addEventListener("click", addNewParticipant);
 
   generateButton.addEventListener("click", generateTeams);
+
+  questionMark.addEventListener("click", () => {
+    infoAboutPage.classList.toggle("visible");
+  });
 }
 
 window.onload = () => {
   addingEventListeners();
-  makeUnassignedParticipantsRemovable();
+  // makeUnassignedParticipantsRemovable(); // TODO delete this part after you're done with the code (it's not necessary bc at the beginning you don't have any unassigned members)
 };
