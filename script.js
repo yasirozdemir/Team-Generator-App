@@ -167,6 +167,53 @@ function generateTeams() {
   }
 }
 
+let regenerateButton = document.getElementById("regenerate-teams_button");
+
+function regenerateTeams() {
+  let numberOfTeams = document.getElementsByClassName("teams").length;
+
+  if (numberOfTeams > 0) {
+    let allMembers = document.querySelectorAll(".lists > div > div");
+
+    let allMembersArray = Array.from(allMembers);
+    // console.log(allMembersArray);
+    let memberPerTeam = allMembersArray.length / numberOfTeams;
+
+    let shuffledArray = [];
+    let usedIndexes = [];
+
+    let i = 0;
+    while (i < allMembers.length) {
+      let randomIndex = Math.floor(Math.random() * allMembers.length);
+      if (!usedIndexes.includes(randomIndex)) {
+        shuffledArray.push(allMembers[randomIndex]);
+        usedIndexes.push(randomIndex);
+        i++;
+      }
+    }
+
+    for (let i = 1; i <= numberOfTeams; i++) {
+      let newTeamList = document.getElementById(`team-${i}`);
+
+      if (shuffledArray.length > 0) {
+        let newTeamMembers = [];
+        for (let temp = 1; temp <= memberPerTeam; temp++) {
+          newTeamMembers.push(shuffledArray[shuffledArray.length - 1]);
+          shuffledArray.pop();
+        }
+
+        for (member of newTeamMembers) {
+          if (typeof member != "undefined") {
+            newTeamList.appendChild(member);
+          }
+        }
+      }
+    }
+  } else {
+    alert("There's no team to regenerate!");
+  }
+}
+
 function addingEventListeners() {
   nameInput.addEventListener("keyup", addNewParticipant);
 
@@ -177,9 +224,11 @@ function addingEventListeners() {
   questionMark.addEventListener("click", () => {
     infoAboutPage.classList.toggle("visible");
   });
+
+  regenerateButton.addEventListener("click", regenerateTeams);
 }
 
 window.onload = () => {
   addingEventListeners();
-  // makeUnassignedParticipantsRemovable(); // TODO delete this part after you're done with the code (it's not necessary bc at the beginning you don't have any unassigned members)
+  makeUnassignedParticipantsRemovable(); // TODO delete this part after you're done with the code (it's not necessary bc at the beginning you don't have any unassigned members)
 };
