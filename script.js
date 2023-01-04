@@ -71,6 +71,20 @@ function shuffleUnassignedParticipants() {
   return shuffledArray;
 }
 
+function deleteEmptyTeams() {
+  // deleting empty teams
+  let newTeams = document.getElementsByClassName("teams");
+  let emptyTeamsArray = [];
+  for (let i = 0; i < newTeams.length; i++) {
+    if (newTeams[i].childElementCount === 0) {
+      emptyTeamsArray.push(newTeams[i].parentNode);
+    }
+  }
+  for (team of emptyTeamsArray) {
+    team.remove();
+  }
+}
+
 function generateTeams() {
   var numberInput = document.getElementById("number_input");
 
@@ -142,19 +156,7 @@ function generateTeams() {
       makeUnassignedParticipantsRemovable();
     }
 
-    // deleting empty arrays
-    let newTeams = document.getElementsByClassName("teams");
-    let emptyTeamsArray = [];
-    for (let i = 0; i < newTeams.length; i++) {
-      if (newTeams[i].childElementCount === 0) {
-        emptyTeamsArray.push(newTeams[i].parentNode);
-        //newTeams[i].parentNode.outerHTML = "";
-        // newTeams[i].parentNode.remove();
-      }
-    }
-    for (team of emptyTeamsArray) {
-      team.remove();
-    }
+    deleteEmptyTeams();
 
     // to prevent the function break remove event listener from the button
     generateButton.removeEventListener("click", generateTeams);
@@ -194,17 +196,20 @@ function regenerateTeams() {
 
     for (let i = 1; i <= numberOfTeams; i++) {
       let newTeamList = document.getElementById(`team-${i}`);
+      // console.log(newTeamList);
 
-      if (shuffledArray.length > 0) {
-        let newTeamMembers = [];
-        for (let temp = 1; temp <= memberPerTeam; temp++) {
-          newTeamMembers.push(shuffledArray[shuffledArray.length - 1]);
-          shuffledArray.pop();
-        }
+      if (newTeamList != null) {
+        if (shuffledArray.length > 0) {
+          let newTeamMembers = [];
+          for (let temp = 1; temp <= memberPerTeam; temp++) {
+            newTeamMembers.push(shuffledArray[shuffledArray.length - 1]);
+            shuffledArray.pop();
+          }
 
-        for (member of newTeamMembers) {
-          if (typeof member != "undefined") {
-            newTeamList.appendChild(member);
+          for (member of newTeamMembers) {
+            if (typeof member != "undefined") {
+              newTeamList.appendChild(member);
+            }
           }
         }
       }
