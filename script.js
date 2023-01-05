@@ -29,6 +29,18 @@ function addNewParticipant(eventData) {
     eventData.target.id === "add-participant_button"
   ) {
     let newParticipantName = nameInput.value;
+
+    // checking if we have the same input
+    let members = document.getElementsByClassName("list-item");
+    let membersInnerTextArray = [];
+    for (member of members) {
+      membersInnerTextArray.push(member.innerText);
+    }
+    if (membersInnerTextArray.includes(`${newParticipantName}`)) {
+      alert(`You already have ${newParticipantName} added as a member!`);
+      return;
+    }
+
     if (newParticipantName != "") {
       let newParticipant = document.createElement("div");
       newParticipant.innerText = newParticipantName;
