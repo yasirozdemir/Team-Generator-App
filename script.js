@@ -79,12 +79,7 @@ function deleteEmptyTeams() {
       emptyTeamsArray.push(newTeams[i].parentNode);
     }
   }
-  // for (team of newTeams) {
-  //   if (team.parentNode.nextSibling != null) {
-  //     let previousTeamTitle = team.parentNode.firstChild.innerText;
-  //     team.parentNode.nextSibling.firstChild.innerText = previousTeamTitle;
-  //   }
-  // }
+
   for (team of emptyTeamsArray) {
     team.remove();
   }
@@ -151,7 +146,29 @@ function generateTeams() {
           eventData.target.classList.add("unassigned");
           let parentID = localStorage.getItem("parentID");
           let parent = document.getElementById(`${parentID}`);
+
+          let teams = document.getElementsByClassName("teams");
+
           if (parent.childElementCount === 0) {
+            let teamToBeDeleted = document.getElementById(
+              `team-${parseInt(parentID.substring(5))}`
+            );
+            let indexOfTeamToBeDeleted = parseInt(parentID.substring(5));
+
+            for (let i = indexOfTeamToBeDeleted; i < teams.length; i++) {
+              teams[i].removeAttribute("id");
+              teams[i].setAttribute(
+                "id",
+                `team-${parseInt(
+                  teams[i].parentNode.firstChild.innerText.substring(5) - 1
+                )}`
+              );
+
+              teams[i].parentNode.firstChild.innerHTML = `Team ${parseInt(
+                teams[i].parentNode.firstChild.innerText.substring(5) - 1
+              )}`;
+            }
+
             listContainer.removeChild(parent.parentNode);
           }
           if (parentID != "unassigned-participants_list") {
@@ -176,9 +193,24 @@ function generateTeams() {
 }
 
 let regenerateButton = document.getElementById("regenerate-teams_button");
+let regenerateInput = document.getElementById("number_input-regenerate");
 
 function regenerateTeams() {
-  let numberOfTeams = document.getElementsByClassName("teams").length;
+  let numberOfTeamsExisted = document.getElementsByClassName("teams").length;
+  if (numberOfTeamsExisted === 0) {
+    alert("There's no team to regenerate!");
+    return;
+  }
+
+  let numberOfTeams = regenerateInput.value;
+
+  if (numberOfTeams > numberOfTeamsExisted) {
+    alert(
+      `Since there is ${numberOfTeamsExisted} teams already existed, the number of teams optimized to regenerate. If you want to regenerate the teams again you can set the number of teams max ${numberOfTeamsExisted}!`
+    );
+    regenerateInput.setAttribute("max", `${numberOfTeamsExisted}`);
+    regenerateInput.value = 5;
+  }
 
   if (numberOfTeams > 0) {
     let allMembers = document.querySelectorAll(".lists > div > div");
@@ -218,8 +250,6 @@ function regenerateTeams() {
         }
       }
     }
-  } else {
-    alert("There's no team to regenerate!");
   }
 }
 
