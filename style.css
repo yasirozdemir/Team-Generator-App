@@ -60,8 +60,13 @@ body {
 
 #name_input::placeholder,
 #number_input::placeholder {
-  color: red;
+  color: #4c5e70;
   font-weight: 700;
+}
+
+#name_input.red-placeholder_class::placeholder,
+#number_input.red-placeholder_class::placeholder {
+  color: rgb(179, 35, 35);
 }
 
 #add-participant_button,

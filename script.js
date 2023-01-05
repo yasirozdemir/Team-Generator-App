@@ -51,6 +51,7 @@ function addNewParticipant(eventData) {
       return;
     } else {
       nameInput.setAttribute("placeholder", "Please insert a name!");
+      nameInput.classList.toggle("red-placeholder_class");
       return;
     }
   }
@@ -162,9 +163,6 @@ function generateTeams() {
           let teams = document.getElementsByClassName("teams");
 
           if (parent.childElementCount === 0) {
-            let teamToBeDeleted = document.getElementById(
-              `team-${parseInt(parentID.substring(5))}`
-            );
             let indexOfTeamToBeDeleted = parseInt(parentID.substring(5));
 
             for (let i = indexOfTeamToBeDeleted; i < teams.length; i++) {
@@ -199,6 +197,7 @@ function generateTeams() {
     generateButton.disabled = true;
     numberInput.disabled = true;
     numberInput.setAttribute("placeholder", "TEAMS CREATED");
+    numberInput.classList.toggle("red-placeholder_class");
   } else {
     alert("Please add some names!");
   }
