@@ -2,17 +2,14 @@
 var unassignedParticipantsList = document.getElementById(
   "unassigned-participants_list"
 );
-
 var nameInput = document.getElementById("name_input");
 var addParticipantButton = document.getElementById("add-participant_button");
-
 var generateButton = document.getElementById("generate_button");
-
 var listContainer = document.getElementById("list_container");
-
 let questionMark = document.querySelector("#input_container > div > svg");
 let infoAboutPage = document.getElementById("info-about-page");
 
+// FUNCTIONS
 function makeUnassignedParticipantsRemovable() {
   let unassignedParticipantsNode =
     document.getElementsByClassName("unassigned");
@@ -25,35 +22,6 @@ function makeUnassignedParticipantsRemovable() {
     });
   }
 }
-
-// function makeParticipantsRemovable() {
-//   let allMembers = document.querySelectorAll(".lists > div > div");
-//   console.log(allMembers);
-
-//   for (member of allMembers) {
-//     member.addEventListener("click", (eventData) => {
-//       let parent = eventData.target.parentNode;
-//       let parentID = eventData.target.parentNode.getAttribute("id");
-//       localStorage.setItem("parentID", `${parentID}`);
-//       parent.removeChild(eventData.target);
-
-//       // let parentID = localStorage.getItem("parentID");
-//       // console.log(parentID);
-
-//       // let parent = document.getElementById(`${parentID}`);
-//       // console.log(parent.childElementCount);
-//       if (
-//         parent.childElementCount === 0 &&
-//         parentID != "unassigned-participants_list"
-//       ) {
-//         listContainer.removeChild(parent.parentNode);
-//       }
-//       if (parentID != "unassigned-participants_list") {
-//         unassignedParticipantsList.appendChild(eventData.target);
-//       }
-//     });
-//   }
-// }
 
 function addNewParticipant(eventData) {
   if (
@@ -109,7 +77,6 @@ function deleteEmptyTeams() {
   for (let i = 0; i < newTeams.length; i++) {
     if (newTeams[i].childElementCount === 0) {
       emptyTeamsArray.push(newTeams[i].parentNode);
-      // console.log(emptyTeamsArray);
     }
   }
   // for (team of newTeams) {
@@ -180,22 +147,16 @@ function generateTeams() {
     var assignedMembers = document.querySelectorAll(".teams .list-item");
     for (member of assignedMembers) {
       member.addEventListener("click", (eventData) => {
-        let memberToMakeUnassigned = eventData.target;
-        memberToMakeUnassigned.classList.add("unassigned");
-
-        let parentID = localStorage.getItem("parentID");
-        console.log(parentID);
-
-        let parent = document.getElementById(`${parentID}`);
-        console.log(parent.childElementCount);
-        if (
-          parent.childElementCount === 0 &&
-          parentID != "unassigned-participants_list"
-        ) {
-          listContainer.removeChild(parent.parentNode);
-        }
-        if (parentID != "unassigned-participants_list") {
-          unassignedParticipantsList.appendChild(memberToMakeUnassigned);
+        if (!eventData.target.classList.contains("unassigned")) {
+          eventData.target.classList.add("unassigned");
+          let parentID = localStorage.getItem("parentID");
+          let parent = document.getElementById(`${parentID}`);
+          if (parent.childElementCount === 0) {
+            listContainer.removeChild(parent.parentNode);
+          }
+          if (parentID != "unassigned-participants_list") {
+            unassignedParticipantsList.appendChild(eventData.target);
+          }
         }
       });
       makeUnassignedParticipantsRemovable();
@@ -240,7 +201,6 @@ function regenerateTeams() {
 
     for (let i = 1; i <= numberOfTeams; i++) {
       let newTeamList = document.getElementById(`team-${i}`);
-      // console.log(newTeamList);
 
       if (newTeamList != null) {
         if (shuffledArray.length > 0) {
