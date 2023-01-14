@@ -59,7 +59,8 @@ body {
 }
 
 #name_input::placeholder,
-#number_input::placeholder {
+#number_input::placeholder,
+#number_input-regenerate::placeholder {
   color: #4c5e70;
   font-weight: 700;
 }

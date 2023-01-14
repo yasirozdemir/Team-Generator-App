@@ -280,5 +280,5 @@ function addingEventListeners() {
 
 window.onload = () => {
   addingEventListeners();
-  makeUnassignedParticipantsRemovable(); // TODO delete this part after you're done with the code (it's not necessary bc at the beginning you don't have any unassigned members)
+  // makeUnassignedParticipantsRemovable(); // TODO delete this part after you're done with the code (it's not necessary bc at the beginning you don't have any unassigned members)
 };
